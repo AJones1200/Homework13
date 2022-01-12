@@ -36,29 +36,22 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
-  // update a category by its `id` value
-  Category.update(
+router.put('/:id', async (req, res) => {
+  try {
+    const category = await Category.update(
     {
-      // All the fields you can update and the data attached to the request body.
-      title: req.body.title,
-      author: req.body.author,
-      isbn: req.body.isbn,
-      pages: req.body.pages,
-      edition: req.body.edition,
-      is_paperback: req.body.is_paperback,
+      category_name: req.body.category_name,
     },
     {
-      // Gets the books based on the isbn given in the request parameters
       where: {
-        isbn: req.params.isbn,
+        id: req.params.id,
       },
     }
   )
-    .then((updatedCategory) => {
-      res.json(updatedCategory);
-    })
-    .catch((err) => res.json(err));
+  res.status(200).json(category);
+} catch (err) {
+  res.status(400).json(err);
+}
 });
 
 router.delete('/:id', async (req, res) => {
@@ -66,7 +59,8 @@ router.delete('/:id', async (req, res) => {
     const category = await Category.destroy({
       where: {
         id: req.params.id
-      },})}
+      },})
+    res.status(200).json(category)}
       catch (err) {
         res.status(400).json(err);
     }})
