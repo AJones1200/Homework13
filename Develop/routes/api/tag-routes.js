@@ -65,10 +65,17 @@ router.delete('/:id', async (req, res) => {
     const tag = await Tag.destroy({
       where: {
         id: req.params.id
-      },})}
-      catch (err) {
-        res.status(400).json(err);
-    }
+      },}) 
+      if (!tag) { 
+        res.status(400).json({message: "No product with that id exists."})
+        return
+      };
+
+      res.status(200).json(tag)
+      }
+     catch (err) {
+       res.status()
+     }
 });
 
 module.exports = router;
